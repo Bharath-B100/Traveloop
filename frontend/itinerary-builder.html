@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itinerary Builder – Traveloop</title>
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/itinerary.css">
+</head>
+<body>
+  <div class="page-wrapper"><div class="container">
+    <div class="builder-trip-header" id="tripHeader"></div>
+    <div class="builder-layout">
+      <aside class="builder-sidebar">
+        <h2>📍 Stops</h2>
+        <div class="stop-list" id="stopList"></div>
+        <button class="btn btn-primary btn-block" id="addStopBtn">+ Add Stop</button>
+      </aside>
+      <main class="builder-main" id="mainContent">
+        <div class="empty-state"><div class="empty-state-icon">🗺️</div><h3 class="empty-state-title">Select a stop</h3><p class="empty-state-text">Click a stop on the left or add a new one</p></div>
+      </main>
+    </div>
+  </div></div>
+  <div class="builder-budget-bar" id="budgetBar" style="display:none">
+    <span>Estimated Total</span><span class="budget-total" id="budgetTotal">$0</span>
+    <a class="btn btn-sm btn-success" id="viewBudgetLink">View Breakdown →</a>
+  </div>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/utils.js"></script>
+  <script src="/assets/js/itinerary-builder.js"></script>
+</body>
+</html>

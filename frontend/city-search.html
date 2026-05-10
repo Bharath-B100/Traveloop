@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Cities – Traveloop</title>
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/search.css">
+</head>
+<body>
+  <div class="page-wrapper"><div class="container">
+    <div class="search-page-header"><h1>🌍 Explore Cities</h1><p>Discover amazing destinations around the world</p></div>
+    <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="Search cities by name or country..."></div>
+    <div class="search-layout">
+      <aside class="search-filters">
+        <h3>Filters</h3>
+        <div class="filter-group"><label>Country</label><select id="countryFilter" class="form-select"><option value="">All Countries</option></select></div>
+        <div class="filter-group"><label>Max Cost Index</label><input type="range" id="costFilter" min="1" max="5" step="0.5" value="5" style="width:100%"><span id="costValue" style="font-size:0.8rem;color:var(--text-muted)">Any</span></div>
+        <div class="filter-group"><label>Sort By</label><select id="sortFilter" class="form-select"><option value="popularity">Popularity</option><option value="cost_asc">Cost: Low → High</option><option value="cost_desc">Cost: High → Low</option></select></div>
+        <button class="btn btn-primary btn-block btn-sm" onclick="searchCities()">Apply</button>
+      </aside>
+      <main>
+        <div class="search-results-count" id="resultsCount"></div>
+        <div class="card-grid" id="resultsGrid"></div>
+      </main>
+    </div>
+  </div></div>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/utils.js"></script>
+  <script src="/assets/js/city-search.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+.packing-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.packing-header h1 { font-family: var(--font-display); font-size: 1.8rem; }
+.packing-progress { margin-bottom: 24px; }
+.packing-progress-text { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+.packing-add { display: flex; gap: 10px; margin-bottom: 24px; }
+.packing-add input { flex: 1; }
+.packing-categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.packing-category h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.packing-items { display: flex; flex-direction: column; gap: 6px; }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Trip – Traveloop</title>
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/trips.css">
+</head>
+<body>
+  <div class="page-wrapper"><div class="container">
+    <div class="create-trip-page">
+      <h1>✈ Create New Trip</h1>
+      <p class="subtitle">Start planning your next adventure</p>
+      <div class="trip-form">
+        <div class="form-group">
+          <label class="form-label" for="tripName">Trip Name *</label>
+          <input type="text" id="tripName" class="form-input" placeholder="e.g. European Summer Adventure" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="tripDesc">Description</label>
+          <textarea id="tripDesc" class="form-textarea" placeholder="What's this trip about?"></textarea>
+        </div>
+        <div class="date-row">
+          <div class="form-group">
+            <label class="form-label" for="startDate">Start Date</label>
+            <input type="date" id="startDate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="endDate">End Date</label>
+            <input type="date" id="endDate" class="form-input">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cover Photo</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="url" id="coverUrl" class="form-input" placeholder="https://... (or upload below)" style="flex:1">
+          </div>
+          <input type="file" id="coverUpload" accept="image/*" class="form-input" style="margin-top:8px;padding:8px">
+          <div id="uploadStatus" style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;"></div>
+        </div>
+        <button id="createBtn" class="btn btn-primary btn-block btn-lg" style="margin-top:12px">Create Trip</button>
+      </div>
+    </div>
+  </div></div>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/utils.js"></script>
+  <script src="/assets/js/create-trip.js"></script>
+</body>
+</html>

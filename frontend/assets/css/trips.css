@@ -1,0 +1,14 @@
+.create-trip-page { max-width: 640px; margin: 0 auto; padding-top: 40px; }
+.create-trip-page h1 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+.create-trip-page .subtitle { color: var(--text-secondary); margin-bottom: 32px; }
+.trip-form { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 32px; }
+.date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.trips-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.trips-header h1 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; }
+.trip-list-card { cursor: pointer; position: relative; }
+.trip-list-card .card-actions { position: absolute; top: 16px; right: 16px; display: flex; gap: 6px; }
+.trip-list-card .card-actions button { opacity: 0; transition: var(--transition); }
+.trip-list-card:hover .card-actions button { opacity: 1; }
+
+@media (max-width: 768px) { .date-row { grid-template-columns: 1fr; } }

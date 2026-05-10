@@ -1,0 +1,111 @@
+.admin-header {
+  margin-bottom: 32px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+}
+.stat-card h4 {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.stat-card .value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.admin-table th {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.admin-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+.admin-table tbody tr:hover {
+  background: var(--glass);
+}
+
+.top-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+}
+.top-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+.top-list li:last-child {
+  border-bottom: none;
+}
+.top-list .name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.top-list .subtext {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: block;
+}
+.top-list .count {
+  background: var(--glass);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+}

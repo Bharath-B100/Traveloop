@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Trips – Traveloop</title>
+  <meta name="description" content="Manage all your travel plans in one place.">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/trips.css">
@@ -11,8 +12,22 @@
 <body>
   <div class="page-wrapper"><div class="container">
     <div class="trips-header">
-      <h1>My Trips</h1>
+      <div>
+        <h1>My Trips</h1>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:4px">All your adventures in one place</p>
+      </div>
       <a href="/create-trip.html" class="btn btn-primary">✈ New Trip</a>
+    </div>
+    <div class="trips-filter-bar">
+      <div class="search-bar" style="flex:1;min-width:200px;margin-bottom:0">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="tripSearchInput" placeholder="Search trips…" oninput="filterTrips()">
+      </div>
+      <select class="form-select" id="tripSortSelect" onchange="filterTrips()" style="min-width:160px">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="upcoming">Upcoming</option>
+      </select>
     </div>
     <div class="card-grid" id="tripGrid"></div>
   </div></div>

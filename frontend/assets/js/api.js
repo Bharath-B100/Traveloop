@@ -46,6 +46,7 @@ const api = {
   getCity: (id) => apiRequest(`/cities/${id}`),
   addCity: (d) => apiRequest('/cities', { method: 'POST', body: JSON.stringify(d) }),
   updateCity: (id, d) => apiRequest(`/cities/${id}`, { method: 'PUT', body: JSON.stringify(d) }),
+  deleteCity: (id) => apiRequest(`/cities/${id}`, { method: 'DELETE' }),
   getPopularCities: () => apiRequest('/cities/popular'),
   getCountries: () => apiRequest('/cities/countries'),
   // Activities
@@ -70,6 +71,8 @@ const api = {
   // Admin
   getAdminStats: () => apiRequest('/admin/stats'),
   getAdminUsers: () => apiRequest('/admin/users'),
+  deleteAdminUser: (id) => apiRequest(`/admin/users/${id}`, { method: 'DELETE' }),
+  updateUserRole: (id, role) => apiRequest(`/admin/users/${id}/role`, { method: 'PUT', body: JSON.stringify({ role }) }),
   getTopCities: () => apiRequest('/admin/top-cities'),
   getTopActivities: () => apiRequest('/admin/top-activities'),
   getTrends: () => apiRequest('/admin/trends'),

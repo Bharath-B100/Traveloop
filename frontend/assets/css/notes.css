@@ -1,9 +1,46 @@
-.notes-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-.notes-header h1 { font-family: var(--font-display); font-size: 1.8rem; }
-.note-card { margin-bottom: 16px; }
-.note-card-header { display: flex; align-items: center; justify-content: space-between; }
-.note-card-title { font-weight: 600; font-size: 1.05rem; }
-.note-card-time { font-size: 0.75rem; color: var(--text-muted); }
-.note-card-body { color: var(--text-secondary); font-size: 0.9rem; margin-top: 8px; white-space: pre-wrap; }
-.note-card-footer { display: flex; gap: 8px; margin-top: 12px; }
-.note-city-tag { font-size: 0.75rem; color: var(--accent); margin-top: 4px; }
+/* ===== NOTES ===== */
+.notes-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+  padding-bottom: 22px; border-bottom: 1px solid var(--glass-border);
+}
+.notes-header h1 {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.notes-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+.note-card {
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg); padding: 20px;
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+.note-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gradient-hero);
+}
+.note-card:hover { border-color: var(--glass-border-hover); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.note-card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 10px; gap: 10px;
+}
+.note-card-title { font-weight: 700; font-size: 1rem; flex: 1; }
+.note-card-time { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
+.note-city-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.76rem; color: var(--accent-light);
+  background: rgba(124,111,253,0.1); border: 1px solid rgba(124,111,253,0.15);
+  padding: 3px 10px; border-radius: var(--radius-full); margin-bottom: 10px;
+}
+.note-card-body {
+  font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65;
+  display: -webkit-box; -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.note-card-footer {
+  display: flex; gap: 8px; justify-content: flex-end;
+  margin-top: 16px; padding-top: 14px;
+  border-top: 1px solid var(--glass-border);
+}

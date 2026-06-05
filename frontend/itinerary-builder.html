@@ -9,7 +9,10 @@
 </head>
 <body>
   <div class="page-wrapper"><div class="container">
-    <div class="builder-trip-header" id="tripHeader"></div>
+    <div class="builder-trip-header" id="tripHeader">
+      <div class="skeleton" style="height:32px;width:260px;margin-bottom:12px"></div>
+      <div class="skeleton" style="height:14px;width:180px"></div>
+    </div>
     <div class="builder-layout">
       <aside class="builder-sidebar">
         <h2>📍 Stops</h2>
@@ -17,7 +20,11 @@
         <button class="btn btn-primary btn-block" id="addStopBtn">+ Add Stop</button>
       </aside>
       <main class="builder-main" id="mainContent">
-        <div class="empty-state"><div class="empty-state-icon">🗺️</div><h3 class="empty-state-title">Select a stop</h3><p class="empty-state-text">Click a stop on the left or add a new one</p></div>
+        <div class="empty-state">
+          <div class="empty-state-icon">🗺️</div>
+          <h3 class="empty-state-title">Select a stop</h3>
+          <p class="empty-state-text">Click a stop on the left or add a new destination</p>
+        </div>
       </main>
     </div>
   </div></div>

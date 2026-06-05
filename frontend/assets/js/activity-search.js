@@ -1,48 +1,57 @@
-let activeType = '', cityId = null;
+let actSearchTimeout, currentType = '';
+
 document.addEventListener('DOMContentLoaded', async () => {
   if (!requireAuth()) return;
   renderNav('cities');
-  cityId = getParam('city');
-  if (cityId) {
-    try {
-      const city = await api.getCity(cityId);
-      document.getElementById('subtitle').textContent = `Activities in ${city.name}, ${city.country}`;
-    } catch(e){}
-  }
-  const types = ['all','sightseeing','food','adventure','culture','nightlife','shopping','nature','wellness'];
-  document.getElementById('typeTabs').innerHTML = types.map(t =>
-    `<button class="type-tab ${t==='all'?'active':''}" onclick="filterType('${t==='all'?'':t}',this)">${t==='all'?'All':t[0].toUpperCase()+t.slice(1)}</button>`
-  ).join('');
-  document.getElementById('searchInput').addEventListener('input', debounce(searchActs, 400));
-  searchActs();
+  await searchActivities();
 });
 
-function filterType(type, el) {
-  activeType = type;
-  document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  searchActs();
+function setTypeFilter(type) {
+  currentType = type;
+  document.getElementById('typeFilter').value = type;
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.type === type);
+  });
+  searchActivities();
 }
 
-async function searchActs() {
-  const params = { q: document.getElementById('searchInput').value.trim() };
-  if (activeType) params.type = activeType;
-  if (cityId) params.city_id = cityId;
-  try {
-    const acts = await api.searchActivities(params);
-    document.getElementById('resultsCount').textContent = `${acts.length} activities found`;
-    document.getElementById('resultsGrid').innerHTML = acts.map(a => `
-      <div class="card animate-in">
-        <div class="card-header"><span class="card-title">${a.name}</span>${getTypeBadge(a.type)}</div>
-        <p class="card-body">${a.description || ''}</p>
-        <div class="city-card-meta" style="margin-top:12px">
-          <span class="badge badge-teal">💰 ${formatCurrency(a.cost)}</span>
-          <span class="badge badge-sky">⏱ ${a.duration_hours}h</span>
-          <span style="font-size:0.8rem;color:var(--text-muted)">📍 ${a.city_name}</span>
+async function searchActivities() {
+  clearTimeout(actSearchTimeout);
+  actSearchTimeout = setTimeout(async () => {
+    const q = document.getElementById('actInput').value.trim();
+    const type = document.getElementById('typeFilter').value || currentType;
+    try {
+      const activities = await api.searchActivities({ q, type, limit: 100 });
+      renderActivities(activities);
+    } catch(e) {}
+  }, 300);
+}
+
+function renderActivities(activities) {
+  const grid = document.getElementById('actGrid');
+  if (!activities.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-icon">🎯</div>
+      <h3 class="empty-state-title">No activities found</h3>
+      <p class="empty-state-text">Try a different search or filter.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = activities.map(a => `
+    <div class="activity-card animate-in">
+      <div class="activity-card-header">
+        <div class="activity-card-name">${a.name}</div>
+        ${getTypeBadge(a.type)}
+      </div>
+      ${a.city_name ? `<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px">📍 ${a.city_name}, ${a.country||''}</div>` : ''}
+      <div class="activity-card-desc">${a.description || 'No description available.'}</div>
+      <div class="activity-card-footer">
+        <div class="activity-card-meta">
+          <span class="activity-meta-item">💰 ${formatCurrency(a.cost)}</span>
+          <span class="activity-meta-item">⏱ ${a.duration_hours}h</span>
         </div>
       </div>
-    `).join('');
-    animateCards('.card');
-  } catch(e){}
+    </div>
+  `).join('');
+  animateCards('.activity-card');
 }
-function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }

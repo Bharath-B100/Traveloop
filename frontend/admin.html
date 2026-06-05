@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard – Traveloop</title>
+  <meta name="description" content="Traveloop admin panel — manage users, cities, activities, and view analytics.">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
@@ -12,66 +13,137 @@
 <body>
   <div class="page-wrapper">
     <div class="container">
-      <div class="admin-header" style="display:flex;justify-content:space-between;align-items:center">
+      <!-- Header -->
+      <div class="admin-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
         <div>
           <h1>Admin Dashboard</h1>
-          <p class="subtitle">Platform Analytics and Management</p>
+          <p class="subtitle">Platform Analytics & Management</p>
         </div>
-        <button class="btn btn-primary" onclick="showAddCityModal()">+ Add Destination</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="exportData()">⬇ Export Data</button>
+          <button class="btn btn-primary" onclick="showAddCityModal()">+ Add Destination</button>
+        </div>
       </div>
 
       <!-- Stats Grid -->
       <div class="stats-grid animate-in" id="statsGrid">
-        <!-- populated by js -->
+        <div class="admin-stat-card skeleton" style="height:90px"></div>
+        <div class="admin-stat-card skeleton" style="height:90px"></div>
+        <div class="admin-stat-card skeleton" style="height:90px"></div>
+        <div class="admin-stat-card skeleton" style="height:90px"></div>
+        <div class="admin-stat-card skeleton" style="height:90px"></div>
       </div>
 
-      <!-- Main Layout -->
-      <div class="admin-layout">
-        <!-- Left Column: Charts and Users -->
-        <div class="admin-col-main">
-          <div class="card animate-in" style="animation-delay:0.1s">
-            <h3>Trips Created (Last 30 Days)</h3>
-            <div class="chart-container">
-              <canvas id="trendsChart"></canvas>
+      <!-- Tab Navigation -->
+      <div class="admin-tabs" role="tablist">
+        <button class="admin-tab active" id="tab-overview" onclick="switchTab('overview')" role="tab">📊 Overview</button>
+        <button class="admin-tab" id="tab-users" onclick="switchTab('users')" role="tab">👥 Users <span class="admin-tab-badge" id="usersBadge">…</span></button>
+        <button class="admin-tab" id="tab-cities" onclick="switchTab('cities')" role="tab">🏙️ Cities</button>
+        <button class="admin-tab" id="tab-activities" onclick="switchTab('activities')" role="tab">🎯 Activities</button>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div class="admin-panel active" id="panel-overview">
+        <div class="admin-layout">
+          <div class="admin-col-main">
+            <div class="card animate-in" style="animation-delay:0.1s">
+              <h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:4px">Trips Created (Last 30 Days)</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0">Daily trip creation trend</p>
+              <div class="chart-container"><canvas id="trendsChart"></canvas></div>
+            </div>
+            <div class="card animate-in" style="animation-delay:0.2s;margin-top:24px">
+              <h3 style="font-family:var(--font-display);font-weight:700">Recent Users</h3>
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>User</th><th>Email</th><th>Role</th><th>Trips</th><th>Joined</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentUsersBody">
+                    <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">Loading…</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-
-          <div class="card animate-in" style="animation-delay:0.2s; margin-top:24px">
-            <h3>Recent Users</h3>
-            <div class="table-responsive">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Trips</th>
-                    <th>Joined</th>
-                  </tr>
-                </thead>
-                <tbody id="usersTableBody">
-                  <!-- populated by js -->
-                </tbody>
-              </table>
+          <div class="admin-col-side">
+            <div class="card animate-in" style="animation-delay:0.3s">
+              <h3 style="font-family:var(--font-display);font-weight:700">Top Cities</h3>
+              <ul class="top-list" id="topCitiesList"></ul>
+            </div>
+            <div class="card animate-in" style="animation-delay:0.4s;margin-top:24px">
+              <h3 style="font-family:var(--font-display);font-weight:700">Top Activities</h3>
+              <ul class="top-list" id="topActivitiesList"></ul>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Right Column: Top Lists -->
-        <div class="admin-col-side">
-          <div class="card animate-in" style="animation-delay:0.3s">
-            <h3>Top Cities</h3>
-            <ul class="top-list" id="topCitiesList">
-              <!-- populated by js -->
-            </ul>
+      <!-- USERS TAB -->
+      <div class="admin-panel" id="panel-users">
+        <div class="admin-search-bar">
+          <div class="search-bar" style="flex:1;margin-bottom:0">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="userSearchInput" placeholder="Search users by name or email…" oninput="filterUsers()">
           </div>
+          <select class="form-select" id="roleFilter" onchange="filterUsers()" style="min-width:140px">
+            <option value="">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th><th>Email</th><th>Role</th><th>Trips</th><th>Joined</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:32px">Loading users…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-          <div class="card animate-in" style="animation-delay:0.4s; margin-top:24px">
-            <h3>Top Activities</h3>
-            <ul class="top-list" id="topActivitiesList">
-              <!-- populated by js -->
-            </ul>
+      <!-- CITIES TAB -->
+      <div class="admin-panel" id="panel-cities">
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+          <div class="search-bar" style="flex:1;min-width:200px;margin-bottom:0">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="citySearchAdmin" placeholder="Search cities…" oninput="filterAdminCities()">
           </div>
+          <button class="btn btn-primary" onclick="showAddCityModal()">+ Add City</button>
+        </div>
+        <div class="city-admin-grid" id="citiesAdminGrid">
+          <div style="color:var(--text-muted);text-align:center;grid-column:1/-1;padding:40px">Loading cities…</div>
+        </div>
+      </div>
+
+      <!-- ACTIVITIES TAB -->
+      <div class="admin-panel" id="panel-activities">
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+          <div class="search-bar" style="flex:1;min-width:200px;margin-bottom:0">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="actSearchAdmin" placeholder="Search activities…" oninput="filterAdminActivities()">
+          </div>
+          <select class="form-select" id="actTypeFilter" onchange="filterAdminActivities()" style="min-width:150px">
+            <option value="">All Types</option>
+            <option value="sightseeing">Sightseeing</option>
+            <option value="food">Food</option>
+            <option value="adventure">Adventure</option>
+            <option value="culture">Culture</option>
+            <option value="nature">Nature</option>
+            <option value="nightlife">Nightlife</option>
+            <option value="shopping">Shopping</option>
+            <option value="wellness">Wellness</option>
+          </select>
+        </div>
+        <div class="activity-admin-list" id="activitiesAdminList">
+          <div style="color:var(--text-muted);text-align:center;padding:40px">Loading activities…</div>
         </div>
       </div>
     </div>

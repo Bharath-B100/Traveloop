@@ -30,7 +30,8 @@ router.get('/', async (req, res) => {
     else if (sort === 'cost_desc') sortOpt.cost_index = -1;
     else sortOpt.popularity = -1;
 
-    const cities = await City.find(filter).sort(sortOpt).limit(50).lean();
+    const limit = parseInt(req.query.limit) || 100;
+    const cities = await City.find(filter).sort(sortOpt).limit(limit).lean();
     cities.forEach(c => c.id = c._id);
     res.json(cities);
   } catch (err) {
@@ -44,13 +45,14 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 // POST /api/cities - Add new city (Admin only)
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, country, region, popularity, cost_index, image_url } = req.body;
+    const { name, country, region, popularity, cost_index, image_url, description } = req.body;
     if (!name || !country) return res.status(400).json({ error: 'Name and country are required' });
     const city = await City.create({
       name, country, region, 
       popularity: popularity || 50, 
       cost_index: cost_index || 3, 
-      image_url: image_url || ''
+      image_url: image_url || '',
+      description: description || ''
     });
     const result = city.toObject();
     result.id = result._id;
@@ -82,6 +84,18 @@ router.put('/:id', authenticate, requireAdmin, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// DELETE /api/cities/:id - Delete city (Admin only)
+router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const city = await City.findByIdAndDelete(req.params.id);
+    if (!city) return res.status(404).json({ error: 'City not found' });
+    res.json({ message: 'City deleted' });
+  } catch (err) { 
+    console.error(err);
+    res.status(500).json({ error: 'Server error' }); 
   }
 });
 

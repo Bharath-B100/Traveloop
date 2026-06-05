@@ -91,4 +91,43 @@ router.get('/trends', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// DELETE /api/admin/users/:id - Delete user (Admin only)
+router.delete('/users/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { Stop, StopActivity, Trip, PackingItem, TripNote } = require('../models');
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    // Cascade delete all user data
+    const trips = await Trip.find({ user_id: req.params.id });
+    for (const trip of trips) {
+      const stops = await Stop.find({ trip_id: trip._id });
+      const stopIds = stops.map(s => s._id);
+      await StopActivity.deleteMany({ stop_id: { $in: stopIds } });
+      await Stop.deleteMany({ trip_id: trip._id });
+      await PackingItem.deleteMany({ trip_id: trip._id });
+      await TripNote.deleteMany({ trip_id: trip._id });
+    }
+    await Trip.deleteMany({ user_id: req.params.id });
+    res.json({ message: 'User deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// PUT /api/admin/users/:id/role - Change user role (Admin only)
+router.put('/users/:id/role', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!['admin', 'user'].includes(role)) return res.status(400).json({ error: 'Invalid role' });
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password_hash');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const obj = user.toObject(); obj.id = obj._id;
+    res.json(obj);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

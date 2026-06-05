@@ -22,7 +22,8 @@ router.get('/', async (req, res) => {
       if (max_cost) filter.cost.$lte = parseFloat(max_cost);
     }
 
-    const activities = await Activity.find(filter).populate('city_id').sort({ name: 1 }).limit(100).lean();
+    const limit = parseInt(req.query.limit) || 100;
+    const activities = await Activity.find(filter).populate('city_id').sort({ name: 1 }).limit(limit).lean();
     const result = activities.map(a => ({
       ...a,
       id: a._id,

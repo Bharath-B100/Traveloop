@@ -22,6 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Password reset link sent! (demo mode)', 'info');
   });
 
+  const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+  const loginPassword = document.getElementById('loginPassword');
+  toggleLoginPassword.addEventListener('click', () => {
+    const isVisible = loginPassword.type === 'text';
+    loginPassword.type = isVisible ? 'password' : 'text';
+    toggleLoginPassword.classList.toggle('is-visible', !isVisible);
+    toggleLoginPassword.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
+    toggleLoginPassword.setAttribute('aria-pressed', String(!isVisible));
+  });
+
   // Password strength indicator
   document.getElementById('signupPassword').addEventListener('input', (e) => {
     const val = e.target.value;
